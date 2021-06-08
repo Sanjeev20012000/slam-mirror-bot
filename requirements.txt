@@ -28,4 +28,4 @@ speedtest-cli
 telegraph
 tenacity
 TgCrypto
-youtube_dl
+yt-dlp
