@@ -58,6 +58,8 @@ def direct_link_generator(link: str):
         return layarkacaxxi(link)
     elif '1drv.ms' in link:
         return onedrive(link)
+    elif 'streamtape.com' in link:
+        return streamtape(link)
     elif '1fichier.com' in link:
         return fichier(link)
     else:
@@ -284,6 +286,13 @@ def onedrive(link: str) -> str:
     file_name = dl_link.rsplit("/", 1)[1]
     resp2 = requests.head(dl_link)
     return dl_link
+
+def streamtape(url: str) -> str:
+    """ Streamtape direct link generator
+    Based on https://github.com/breakdowns/slam-mirrorbot """
+    bypasser = lk21.Bypass()
+    dl_url=bypasser.bypass_streamtape(url)
+    return dl_url
 
 
 def fichier(link: str) -> str:
