@@ -12,8 +12,8 @@ RUN apt-get -qq update && \
     apt-get purge -y software-properties-common
 
 RUN curl -sL -o /var/cache/apt/archives/MEGAcmd.deb https://mega.nz/linux/MEGAsync/Debian_9.0/amd64/megacmd-Debian_9.0_amd64.deb
-mkdir usr/share/doc/megacmd/distro
-mkdir /usr/share/doc/megacmd/version
+MKDIR usr/share/doc/megacmd/distro
+MKDIR /usr/share/doc/megacmd/version
 RUN dpkg -i /var/cache/apt/archives/MEGAcmd.deb
 COPY requirements.txt .
 COPY extract /usr/local/bin
