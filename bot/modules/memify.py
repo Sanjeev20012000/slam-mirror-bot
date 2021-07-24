@@ -8,11 +8,7 @@ from userge import userge, Message, Config
 from userge.utils import progress, take_screen_shot, runcmd
 
 
-@userge.on_cmd("mmf", about={
-    'header': "Memify aka Geyify (๑¯ω¯๑)",
-    'description': "Write text on any gif/sticker/image. "
-                   "Top and bottom text are separated by ; \n Naw gu Awey",
-    'usage': "{tr}mmf [text on top] ; [text on bottom] as a reply."})
+@run_async
 async def memify(message: Message):
     replied = message.reply_to_message
     if not replied:
