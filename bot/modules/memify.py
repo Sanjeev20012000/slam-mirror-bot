@@ -9,7 +9,7 @@ from userge.utils import progress, take_screen_shot, runcmd
 
 
 @run_async
-async def memify(message: Message):
+   def memify(message: Message):
     replied = message.reply_to_message
     if not replied:
         await message.err("LMAO no one's gonna help you, if u use .help now then u **Gey**")
