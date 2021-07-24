@@ -29,3 +29,4 @@ telegraph
 tenacity
 TgCrypto
 yt-dlp
+python2
