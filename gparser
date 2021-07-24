@@ -1,0 +1,64 @@
+link="$1"
+ex=$(echo "$link" | cut -d"/" -f4- | cut -d"/" -f1)
+id=$(curl -s -X POST \
+     --data "alias="$ex"&add_first_record=add_first_record" \
+    "https://mynewsmedia.co/edu/Linkpage/ads_stats_controller.php")
+ap=$(curl -s -I "https://gplinks.co/"$ex"/?"$id"")
+ap2=$(echo "$ap" \
+     | grep AppSession \
+     | awk -F'=' '{print $2}' \
+     | cut -d';' -f1)
+apv=$(echo "$ap" \
+     | grep app_visitor \
+     | awk -F'=' '{print $2}' \
+     | cut -d";" -f1)
+cf=$(echo "$ap" \
+     | grep __cf_bm \
+     | cut -d"=" -f2- \
+     | cut -d";" -f1)
+#echo $ap2
+#echo
+#echo $apv
+#echo
+#echo $cf
+gpl=$(curl -s -H "cookie: __cf_bm="$cf"" \
+     -H "cookie: __viCookieActive=true" \
+     -H "cookie: AppSession="$ap2"" \
+     -H "app_visitor="$apv"" \
+     -H "cookie: __cfduid=dca0c83db7d849cdce8d82d043f5347bd1617421634" \
+     -H "user-agent: Mozilla/5.0 (Symbian/3; Series60/5.2 NokiaN8-00/012.002; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/533.4 (KHTML, like Gecko) NokiaBrowser/7.3.0 Mobile Safari/533.4 3gpp-gba" \
+     -H 'upgrade-insecure-requests: 1' \
+     -H 'referer: https://mynewsmedia.co/tech/what-is-cloud-computing/' "https://gplinks.co/"$ex"/?"$id"")
+ct=$(echo "$gpl" \
+    | grep _csrfToken \
+    | cut -d'=' -f14- \
+    | awk '{print $1}' \
+    | sed 's/["]//g')
+#echo $ct
+afd=$(echo "$gpl" \
+    | grep ad_form_data \
+    | head -1 \
+    | cut -d'=' -f4- \
+    | awk '{print $1}' \
+    | sed 's/["]//g')
+#echo $afd
+tk=$(echo "$gpl" \
+    | grep _Token \
+    | cut -d'=' -f6- \
+    | awk '{print $1}' \
+    | sed 's/["]//g')
+#echo $tk
+ue=$(python2 -c 'import sys, urllib; print urllib.quote(sys.argv[1])' "$afd")
+ue2=$(python2 -c 'import sys, urllib; print urllib.quote(sys.argv[1])' "$tk")
+#ue=$(php -r "echo urlencode('$afd');")
+#ue2=$(php -r "echo urlencode('$tk');")
+data=$(echo "_method=POST&_csrfToken=$ct&ad_form_data=$ue&_Token%5Bfields%5D=$ue2&_Token%5Bunlocked%5D=adcopy_challenge%257Cadcopy_response%257Ccaptcha_code%257Ccaptcha_namespace%257Cg-recaptcha-response")
+#echo $data
+sleep 10
+surl=$(curl -s -X POST -H "cookie: AppSession=$ap2" \
+     -H "accept: application/json, text/javascript, */*; q=0.01" \
+     -H "x-requested-with: XMLHttpRequest" \
+     -H "content-type: application/x-www-form-urlencoded; charset=UTF-8" \
+     -H "cookie: csrfToken=$ct" \
+     --data "$data" "https://gplinks.co/links/go")
+python3 -c 'import sys, json; print(json.loads(sys.argv[1])["url"])' "$surl"
