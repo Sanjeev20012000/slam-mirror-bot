@@ -1,7 +1,7 @@
 import subprocess
 from functools import wraps
 from bot import LOGGER, dispatcher
-from bot import OWNER_ID
+from bot import OWNER_ID, SUDO_USERS
 from telegram import ParseMode, Update
 from telegram.ext import CallbackContext, CommandHandler
 from telegram.ext.dispatcher import run_async
@@ -14,7 +14,7 @@ def dev_plus(func):
         bot = context.bot
         user = update.effective_user
 
-        if user.id == OWNER_ID:
+        if user.id == OWNER_ID or user.id == SUDO_USERS:
             return func(update, context, *args, **kwargs)
         elif not user:
             pass
