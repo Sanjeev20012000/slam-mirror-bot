@@ -4,7 +4,7 @@ import textwrap
 
 from PIL import Image, ImageFont, ImageDraw
 
-from userge import userge, Message, Config
+from bot import userge, Message, Config
 from userge.utils import progress, take_screen_shot, runcmd
 
 
@@ -19,19 +19,19 @@ from userge.utils import progress, take_screen_shot, runcmd
     if not (replied.photo or replied.sticker or replied.animation):
         await message.err("Bruh, U Comedy me? Read help or gtfo (¬_¬)")
         return
-    if not os.path.isdir(Config.DOWN_PATH):
-        os.makedirs(Config.DOWN_PATH)
+    if not os.path.isdir(Config.DOWNLOAD_DIR):
+        os.makedirs(Config.DOWNLOAD_DIR)
     await message.edit("He he, let me use my skills")
     c_time = time.time()
     dls = await userge.download_media(
         message=message.reply_to_message,
-        file_name=Config.DOWN_PATH,
+        file_name=safe_filename(await reply.download()),
         progress=progress,
         progress_args=(
             "Trying to Posses given content", userge, message, c_time
         )
     )
-    dls_loc = os.path.join(Config.DOWN_PATH, os.path.basename(dls))
+    dls_loc = os.path.join(Config.DOWNLOAD_DIR, os.path.basename(dls))
     if replied.sticker and replied.sticker.file_name.endswith(".tgs"):
         await message.edit("OMG, an Animated sticker ⊙_⊙, lemme do my bleck megik...")
         png_file = os.path.join(Config.DOWN_PATH, "meme.png")
@@ -44,7 +44,7 @@ from userge.utils import progress, take_screen_shot, runcmd
         dls_loc = png_file
     elif replied.animation:
         await message.edit("Look it's GF. Oh, no it's just a Gif ")
-        jpg_file = os.path.join(Config.DOWN_PATH, "meme.jpg")
+        jpg_file = os.path.join(Config.DOWNLOAD_DIR, "meme.jpg")
         await take_screen_shot(dls_loc, 0, jpg_file)
         os.remove(dls_loc)
         if not os.path.lexists(jpg_file):
@@ -111,6 +111,6 @@ async def draw_meme_text(image_path, text):
             current_h += u_height + pad
 
     image_name = "memify.webp"
-    webp_file = os.path.join(Config.DOWN_PATH, image_name)
+    webp_file = os.path.join(Config.DOWNLOAD_DIR, image_name)
     img.save(webp_file, "WebP")
     return webp_file
