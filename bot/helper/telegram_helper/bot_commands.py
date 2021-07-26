@@ -25,5 +25,6 @@ class _BotCommands:
         self.TarWatchCommand = 'tarwatch'
         self.DeleteCommand = 'del'
         self.UsageCommand = 'usage'
+        self.GplinkCommand = 'gplink'
 
 BotCommands = _BotCommands()
