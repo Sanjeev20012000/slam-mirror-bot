@@ -1,7 +1,7 @@
 import subprocess
 from functools import wraps
-from bot import LOGGER, dispatcher
-from bot import OWNER_ID, OWN
+from bot import dispatcher, AUTHORIZED_CHATS
+from bot.helper.telegram_helper.bot_commands import BotCommands
 from telegram import ParseMode, Update
 from bot.helper.telegram_helper.filters import CustomFilters
 from telegram.ext import CallbackContext, CommandHandler
