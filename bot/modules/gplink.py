@@ -39,5 +39,5 @@ def gplink(update: Update, context: CallbackContext):
     else:
         message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
 
-GPLINK_HANDLER = CommandHandler(BotCommands.Gplinkcommand, gplink, filters=CustomFilters.authorized_chat | CustomFilters.authorized_user)
+GPLINK_HANDLER = CommandHandler(BotCommands.GplinkCommand, gplink, filters=CustomFilters.authorized_chat | CustomFilters.authorized_user)
 dispatcher.add_handler(GPLINK_HANDLER)
