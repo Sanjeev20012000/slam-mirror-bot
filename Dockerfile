@@ -9,6 +9,14 @@ RUN apt-get -qq update && \
     apt-get -qq update && \
     apt-get -qq install -y p7zip-full mediainfo p7zip-rar aria2 curl pv jq ffmpeg locales python3-lxml python2  && \ 
     apt-get purge -y software-properties-common
+RUN apt-get -qq update
+RUN apt-get -qq install -y --no-install-recommends git gnupg2 unzip wget
+
+# add mkvtoolnix
+RUN wget -q -O - https://mkvtoolnix.download/gpg-pub-moritzbunkus.txt | apt-key add - && \
+    wget -qO - https://ftp-master.debian.org/keys/archive-key-10.asc | apt-key add -
+RUN sh -c 'echo "deb https://mkvtoolnix.download/debian/ buster main" >> /etc/apt/sources.list.d/bunkus.org.list' && \
+    sh -c 'echo deb http://deb.debian.org/debian buster main contrib non-free | tee -a /etc/apt/sources.list' && apt update && apt install -y mkvtoolnix
 
 COPY requirements.txt .
 COPY extract /usr/local/bin
